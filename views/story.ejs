@@ -1,0 +1,95 @@
+<% include ./partials/header.ejs %>
+
+    <div class="storyDiv relative w-full h-screen bg-zinc-900">
+        <div style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);"
+            class="w-full absolute px-5 py-3 pb-7">
+            <h3 class="font-regular text-white flex"><a href="/feed"><i
+                        class="w-6 h-6 text-sm bg-white/20 mr-2 rounded-full flex items-center justify-center ri-arrow-left-line"></i></a>
+                <%= storyUser.username %>
+            </h3>
+            <div class="progresscontainer mt-2 w-full h-1 bg-white/20">
+                <div style="width: 0%;" class="progress w-0 h-full bg-white"></div>
+            </div>
+        </div>
+        <div class="picture w-full h-screen bg-zinc-800 overflow-hidden">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= storyImage.storyImage %>" alt="">
+        </div>
+        <div class="next w-20 h-[80vh] absolute bottom-16 right-0"></div>
+        <div class="prev w-20 h-[80vh] absolute bottom-16 left-0"></div>
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);" class="messages w-full h-16 pb-4 px-4 absolute bottom-0 flex items-center justify-between">
+            <input
+                class="w-full h-full px-5 bg-transparent border-2 border-zinc-500 rounded-full outline-none text-zinc-200"
+                type="text" placeholder="Reply">
+            <i class="ri-heart-3-line text-4xl text-zinc-500"></i>
+        </div>
+    </div>
+
+
+
+    <script>
+
+        let intervalId;
+        let intervalRunning = false;
+        let startTime;
+        let elapsedTime = 0;
+        const intervalDuration = 5000;
+
+        function startInterval() {
+            const prog = document.querySelector(".progress");
+            startTime = Date.now() - elapsedTime;
+
+            if (!intervalRunning) {
+                intervalRunning = true;
+
+                intervalId = setInterval(function () {
+                    elapsedTime = Date.now() - startTime;
+                    const progress = (elapsedTime / intervalDuration) * 100;
+
+                    if (progress >= 100) {
+                        clearInterval(intervalId);
+                        intervalRunning = false;
+                        prog.style.width = '100%';
+                        showNextStory();
+                    } else {
+                        prog.style.width = `${progress}%`;
+                    }
+                }, 50);
+            }
+        }
+
+        function showNextStory() {
+            window.location.href = `http://localhost:3000/story/<%= storyUser._id %>/<%= Number(number)+1 %>`;
+        }
+
+        function showPrevStory() {
+            window.location.href = `http://localhost:3000/story/<%= storyUser._id %>/<%= Number(number)-1 %>`;
+        }
+
+        function stopInterval() {
+            clearInterval(intervalId);
+            intervalRunning = false;
+            elapsedTime = Date.now() - startTime;
+        }
+
+        startInterval();
+
+        const divElement = document.querySelector('.storyDiv');
+        divElement.addEventListener("touchstart", stopInterval);
+        divElement.addEventListener("touchend", startInterval);
+
+
+        divElement.addEventListener('click', function (ev) {
+            if (ev.target.classList.contains('next')) {
+                showNextStory();
+            }
+        })
+
+        divElement.addEventListener('click', function (ev) {
+            if (ev.target.classList.contains('prev')) {
+                showPrevStory();
+            }
+        })
+
+    </script>
+
+    <% include ./partials/footer.ejs %>

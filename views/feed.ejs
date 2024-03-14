@@ -1,0 +1,385 @@
+<% include ./partials/header.ejs %>
+  <style>
+    .story::-webkit-scrollbar {
+      display: none;
+    }
+
+    #more,
+    .Comments {
+      transition: all 0.3s ease;
+    }
+  </style>
+  <div class="w-full min-h-screen bg-zinc-900 text-white py-5">
+    <div class="w-full px-4 flex items-center justify-between">
+      <img class="w-1/4" src="/images/logo.png" alt="">
+      <div class="icons -mt-2 flex gap-5 items-center">
+        <i class="text-[1.4rem] ri-heart-3-line"></i>
+        <i class="text-[1.4rem] ri-messenger-line"></i>
+      </div>
+    </div>
+    <div class="story px-3 flex gap-3 overflow-auto mt-5">
+      <a href="/story/0">
+        <div class="circle flex-shrink-0">
+          <div
+            class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+              <img class="w-full h-full object-cover bg-[#B1B1B1]" src="/images/uploads/<%= user.ProfilePicture %>"
+                alt="">
+            </div>
+          </div>
+        </div>
+      </a>
+      <% stories.forEach(function(elem){ %>
+        <a href="/story/<%= elem.user._id %>/0">
+          <div class="circle flex-shrink-0">
+            <div
+              class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+              <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                <img class="w-full h-full object-cover bg-[#B1B1B1]"
+                  src="/images/uploads/<%= elem.user.ProfilePicture %>" alt="">
+              </div>
+            </div>
+          </div>
+        </a>
+        <% }) %>
+    </div>
+    <div class="posts mb-20">
+      <% posts.reverse().forEach(function(post){ %>
+        <div class="post relative mt-10 w-full min-h-[50vh] overflow-hidden">
+          <div class="title px-4 w-full flex items-center justify-between">
+            <div class=" flex items-center gap-2">
+              <a class="w-[9vw] h-[9vw] bg-[#B1B1B1] rounded-full overflow-hidden"
+                href="/userprofile/<%= post.user.username %>">
+                <div class="w-[9vw] h-[9vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                  <img data-id="<%= post._id %>" class="w-full h-full object-cover"
+                    src="/images/uploads/<%= post.user.ProfilePicture %>" alt="">
+                </div>
+              </a>
+              <h4 class="text-sm">
+                <%= post.user.username %>
+              </h4>
+              <h6 class="text-xs opacity-30">Now</h6>
+            </div>
+            <i class="more ri-more-2-fill text-2xl font-bold"></i>
+          </div>
+          <div id="more" class="w-1/2 h-[30vh] bg-zinc-800 absolute -top-40 -right-full py-5">
+            <% if (post.user._id.toString()===user._id.toString()) { %>
+              <a href="/delete/<%= post._id %>"><i
+                  class="ri-delete-bin-7-fill text-red-500 w-full h-14 px-5 text-lg flex items-center gap-2 hover:bg-zinc-700">Delete
+                  Post</i></a>
+              <% } %>
+                <% if(user.savedPost.indexOf(post._id)===-1){ %>
+                  <i data-id="<%= post._id %>"
+                    class="savedPost ri-bookmark-line w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700">Save
+                    Post</i>
+                  <% } else{ %>
+                    <i data-id="<%= post._id %>"
+                      class="savedPost ri-bookmark-fill w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700">Unsave
+                      Post</i>
+                    <% } %>
+                      <i
+                        class="Close ri-close-circle-fill text-red-500 w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700">Close</i>
+          </div>
+          <div class="w-full h-96 mt-4 overflow-hidden">
+            <img data-id="<%= post._id %>" class="postImg w-full h-full object-cover"
+              src="/images/uploads/<%= post.picture %>" alt="">
+          </div>
+          <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
+            <div class="flex gap-3 mt-2">
+              <i data-id="<%= post._id %>"
+                class="like <%= post.likes.indexOf(user._id) === -1 ? 'ri-heart-3-line' : 'ri-heart-3-fill text-red-500' %>"></i>
+              <i data-id="<%= post._id %>" class="comments ri-chat-3-line"></i>
+              <i class="ri-share-circle-line"></i>
+            </div>
+            <% if(user.savedPost.indexOf(post._id)===-1){ %>
+              <i data-id="<%= post._id %>" class="save ri-bookmark-line"></i>
+              <% } else{ %>
+                <i data-id="<%= post._id %>" class="save ri-bookmark-fill text-white"></i>
+                <% } %>
+          </div>
+          <h3 class="Likes px-4 mt-2 text-sm leading-none tracking-tight">
+            <%= post.likes.length %> Likes
+          </h3>
+          <h2 class="text-white font-light text-sm mt-2"><span class="font-semibold pl-4 pr-2">
+              <%= post.user.username %>
+            </span>
+            <%= post.caption %>
+          </h2>
+          <div>
+            <div>
+              <% if(post.Comments.length> 0){ %>
+                <h2 data-id="<%= post._id %>" class="commentLen w-fit comments px-4 text-md text-zinc-500">view all <%= post.Comments.length %> comments</h2>
+                <% } else{ %>
+                  <h2 data-id="<%= post._id %>" class="w-fit comments px-4 text-md text-zinc-500">No Comments</h2>
+                  <% } %>
+            </div>
+          </div>
+          <div class="Comments w-full h-4/5 bg-zinc-900 fixed -bottom-full z-30">
+            <div class="w-full h-16 bg-zinc-800 flex items-center gap-[31vw] px-2 border-b border-zinc-500">
+              <i class="backComments ri-arrow-left-line text-3xl font-semibold text-zinc-300"></i>
+              <h1 class="text-lg font-medium">Comments</h1>
+            </div>
+            <div class="w-full h-3/4 pt-3 ">
+              <div class="allComments w-full h-full overflow-y-auto scroll-smooth px-4 border-b border-zinc-500">
+                
+              </div>
+            </div>
+            <div class="w-full h-16 mt-1 py-2 flex items-center px-4 gap-2">
+              <div class="w-[14vw] h-[14vw] rounded-full bg-[#B1B1B1]">
+                <img class="w-full h-full object-cover" src="/images/uploads/<%=user.ProfilePicture %>" alt="">
+              </div>
+              <input
+                class="commentField w-60 h-full border-2 border-zinc-600 bg-zinc-800 outline-none rounded-full px-3 text-zinc-200 font-normal"
+                type="text" autocomplete="off" placeholder="Add a comment as <%= user.username %> ">
+              <button data-id="<%= post._id %>" class="comment-btn px-1 py-1 bg-indigo-500 hidden rounded-lg"><i
+                  data-id="<%= post._id %>" class="comment-btn ri-arrow-up-line text-3xl font-light"></i></button>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+    integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+
+  <script>
+
+    function handleLikes() {
+      document.querySelector('.posts').addEventListener("click", function (ev) {
+        var icon = ev.target;
+        if (ev.target.classList.contains('like')) {
+          axios.get(`/like/${ev.target.dataset.id}`)
+            .then(function (res) {
+              if (icon.classList.contains("ri-heart-3-line")) {
+                icon.classList.remove("ri-heart-3-line")
+                icon.classList.add("ri-heart-3-fill", "text-red-500")
+              }
+              else {
+                icon.classList.remove("ri-heart-3-fill", "text-red-500")
+                icon.classList.add("ri-heart-3-line")
+              }
+
+              icon.parentNode.parentNode.parentNode.querySelector(".Likes").textContent = res.data.likes.length + ' Likes';
+
+            })
+        }
+      })
+    };
+    handleLikes();
+
+    function makeHeartAnimation() {
+      document.querySelector('.posts').addEventListener("click", function (ev) {
+        if (ev.target.classList.contains('postImg')) {
+          axios.get(`/Clicklike/${ev.target.dataset.id}`)
+            .then(function (res) {
+              var i = document.createElement('i');
+              i.classList.add('ri-heart-3-fill', 'text-red-500', 'text-5xl', 'z-[34]', 'absolute', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2')
+              ev.target.parentNode.appendChild(i);
+              gsap.from(i, {
+                y: 50,
+                opacity: 0,
+                scale: 2,
+                ease: 'linear',
+                onComplete: function () {
+                  gsap.to(i, {
+                    y: -50,
+                    opacity: 0,
+                    scale: 0,
+                    ease: 'linear'
+                  });
+                  ev.target.parentNode.removeChild(i);
+                }
+              });
+
+
+              if (ev.target.parentNode.parentNode.querySelector('.like').classList.contains("ri-heart-3-line")) {
+                ev.target.parentNode.parentNode.querySelector('.like').classList.remove("ri-heart-3-line")
+                ev.target.parentNode.parentNode.querySelector('.like').classList.add("ri-heart-3-fill", "text-red-500")
+              }
+
+              ev.target.parentNode.parentNode.querySelector('.Likes').textContent = res.data.likes.length + ' Likes';
+            })
+        }
+      })
+    };
+
+    makeHeartAnimation();
+
+    function handleSavePost() {
+      document.querySelector('.posts').addEventListener('click', function (ev) {
+        if (ev.target.classList.contains("save")) {
+          axios.get(`/save/${ev.target.dataset.id}`)
+            .then(function (res) {
+              if (ev.target.classList.contains("ri-bookmark-line")) {
+                ev.target.parentNode.parentNode.querySelector(".savedPost").classList.remove("ri-bookmark-line");
+                ev.target.parentNode.parentNode.querySelector(".savedPost").classList.add("ri-bookmark-fill", "text-white");
+                ev.target.parentNode.parentNode.querySelector(".savedPost").textContent = "Unsave Post";
+                ev.target.classList.remove("ri-bookmark-line")
+                ev.target.classList.add("ri-bookmark-fill", "text-white")
+              }
+              else {
+                ev.target.parentNode.parentNode.querySelector(".savedPost").classList.remove("ri-bookmark-fill", "text-white");
+                ev.target.parentNode.parentNode.querySelector(".savedPost").classList.add("ri-bookmark-line");
+                ev.target.parentNode.parentNode.querySelector(".savedPost").textContent = "Save Post";
+                ev.target.classList.add("ri-bookmark-line")
+                ev.target.classList.remove("ri-bookmark-fill", "text-white")
+              }
+            })
+        }
+        else if (ev.target.classList.contains("savedPost")) {
+          axios.get(`/save/${ev.target.dataset.id}`)
+            .then(function (res) {
+              if (ev.target.classList.contains("ri-bookmark-line")) {
+                ev.target.parentNode.parentNode.querySelector(".save").classList.remove("ri-bookmark-line");
+                ev.target.parentNode.parentNode.querySelector(".save").classList.add("ri-bookmark-fill", "text-white");
+                ev.target.classList.remove("ri-bookmark-line");
+                ev.target.classList.add("ri-bookmark-fill", "text-white");
+                ev.target.textContent = "Unsave Post"
+              }
+              else {
+                ev.target.parentNode.parentNode.querySelector(".save").classList.add("ri-bookmark-line");
+                ev.target.parentNode.parentNode.querySelector(".save").classList.remove("ri-bookmark-fill", "text-white");
+                ev.target.classList.add("ri-bookmark-line")
+                ev.target.classList.remove("ri-bookmark-fill", "text-white")
+                ev.target.textContent = "Save Post"
+              }
+            })
+        }
+      })
+    };
+    handleSavePost();
+
+    function HandleMore() {
+      document.querySelector('.posts').addEventListener("click", function (ev) {
+        if (ev.target.classList.contains('more')) {
+          ev.target.parentNode.parentNode.querySelector("#more").classList.remove("-top-40", "-right-full");
+          ev.target.parentNode.parentNode.querySelector("#more").classList.add("top-0", "right-0");
+        }
+      })
+    };
+    HandleMore();
+
+    function closeMore() {
+      document.querySelector('.posts').addEventListener("click", function (ev) {
+        if (ev.target.classList.contains('Close', '')) {
+          ev.target.parentNode.parentNode.querySelector("#more").classList.add("-top-40", "-right-full");
+          ev.target.parentNode.parentNode.querySelector("#more").classList.remove("top-0", "right-0");
+        }
+      })
+    };
+    closeMore();
+
+    function HandleComment() {
+      document.querySelector('.posts').addEventListener('click', function (ev) {
+        if (ev.target.classList.contains('comments')) {
+          ev.target.parentNode.parentNode.parentNode.querySelector(".Comments").classList.remove('-bottom-full');
+          ev.target.parentNode.parentNode.parentNode.querySelector(".Comments").classList.add('bottom-0');
+          ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.classList.add('overflow-y-hidden')
+          axios.get(`/comments/${ev.target.dataset.id}`)
+            .then(function (res) {
+              var clutter = ""
+              if (res.data.length > 0) {
+                res.data.reverse().forEach(function (elem) {
+                  clutter += `<div class="commentUser w-full min-h-24">
+                  <div class="w-full min-h-10 flex items-center justify-between ">
+                    <div class="w-11/12 min-h-10 flex gap-2">
+                      <a href="/userprofile/${elem.user.username}">
+                        <div class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                          <img class="w-full h-full object-cover" src="/images/uploads/${elem.user.ProfilePicture}" alt="">
+                        </div>
+                      </a>
+                      <div class="w-full min-h-10">
+                        <h1 class="w-5/6 min-h-10 font-bold text-base">${elem.user.username}<span
+                            class="font-normal text-sm ml-3">${elem.comment}</span></h1>
+                        <div class="w-full h-8 flex items-center gap-5">
+                          <h1 class="text-sm font-normal">Now</h1>
+                          <h1 class="text-sm font-normal">${elem.likes.length} Likes</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <i class="likes ri-heart-3-line text-2xl text-zinc-400"></i>
+                  </div>
+                </div>`
+                })
+              }
+              else{
+                clutter += `<div class="nocomment w-full h-full flex items-center justify-center">
+                  <h1 class="text-zinc-500">No Comments</h1>
+                </div>`
+              }
+              ev.target.parentNode.parentNode.parentNode.querySelector('.allComments').innerHTML = clutter;
+            })
+        }
+        else if (ev.target.classList.contains('backComments')) {
+          ev.target.parentNode.parentNode.parentNode.querySelector(".Comments").classList.add('-bottom-full');
+          ev.target.parentNode.parentNode.parentNode.querySelector(".Comments").classList.remove('bottom-0');
+          ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.classList.remove('overflow-y-hidden')
+        }
+      })
+    };
+    HandleComment();
+
+    function CreateComments() {
+      document.querySelector('.posts').addEventListener('click', function (ev) {
+        if (ev.target.classList.contains('commentField')) {
+          ev.target.addEventListener('input', function () {
+            var comment = this.value
+            if (comment.length > 0) {
+              ev.target.parentNode.querySelector('.comment-btn').classList.remove('hidden');
+            }
+            else {
+              ev.target.parentNode.querySelector('.comment-btn').classList.add('hidden');
+            }
+          })
+        }
+        else if (ev.target.classList.contains('comment-btn')) {
+          if(ev.target.parentNode.parentNode.parentNode.querySelector('.nocomment')){
+            ev.target.parentNode.parentNode.parentNode.querySelector('.nocomment').classList.add('hidden');
+          }
+          var commentField = ev.target.parentNode.parentNode.querySelector('.commentField');
+          var comment = commentField.value;
+          axios.get(`/createComment/${comment}/${ev.target.dataset.id}`)
+            .then(function (res) {
+              var existingClutter = ev.target.parentNode.parentNode.parentNode.querySelector('.allComments').innerHTML;
+              var clutter = ""
+              clutter += `<div class="commentUser w-full min-h-24">
+                  <div class="w-full min-h-10 flex items-center justify-between ">
+                    <div class="w-11/12 min-h-10 flex gap-2">
+                      <a href="/userprofile/${res.data.comment.user.username}">
+                        <div class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                          <img class="w-full h-full object-cover" src="/images/uploads/${res.data.comment.user.ProfilePicture}" alt="">
+                        </div>
+                      </a>
+                      <div class="w-full min-h-10">
+                        <h1 class="w-5/6 min-h-10 font-bold text-base">${res.data.comment.user.username}<span
+                            class="font-normal text-sm ml-3">${res.data.comment.comment}</span></h1>
+                        <div class="w-full h-8 flex items-center gap-5">
+                          <h1 class="text-sm font-normal">Now</h1>
+                          <h1 class="text-sm font-normal">${res.data.comment.likes.length} Likes</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <i class="likes ri-heart-3-line text-2xl text-zinc-400"></i>
+                  </div>
+                </div>`
+              var updatedClutter = clutter + existingClutter;
+              ev.target.parentNode.parentNode.parentNode.querySelector('.allComments').innerHTML = updatedClutter
+              ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.commentLen').textContent = `view all ${res.data.post.Comments.length} comments`;
+              commentField.value = "";
+            })
+        }
+      })
+    };
+    CreateComments();
+  </script>
+
+  <% include ./partials/footer.ejs %>

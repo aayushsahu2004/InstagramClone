@@ -1,0 +1,342 @@
+<% include ./partials/header.ejs %>
+  <style>
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .userPost,
+    .savedPost,
+    .postbtn,
+    .savebtn{
+      transition: all 0.1s ease;
+    }
+    .settings{
+      transition: all 0.4s ease;
+    }
+    .FollowersDiv, .FollowingDiv{
+      transition: all 0.3s ease;
+    }
+  </style>
+  <div class="main w-full min-h-screen bg-zinc-900 text-white relative overflow-hidden">
+    <div class="FollowingDiv w-full h-full fixed z-30 bg-zinc-900 -bottom-full">
+      <div class="w-full h-16 bg-zinc-800 flex items-center gap-[31vw] px-2 border-b border-zinc-500">
+        <i class="backProfile ri-arrow-left-line text-3xl font-semibold text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-700"></i>
+        <h1 class="text-lg font-medium">Followings</h1>
+      </div>
+      <div class="allFollowings w-full h-full pt-3 px-4 overflow-y-auto scroll-smooth">
+        
+      </div>
+    </div>
+    <div class="FollowersDiv w-full h-full fixed z-30 bg-zinc-900 -bottom-full">
+      <div class="w-full h-16 bg-zinc-800 flex items-center gap-[31vw] px-2 border-b border-zinc-500">
+        <i class="backProfile ri-arrow-left-line text-3xl font-semibold text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-700"></i>
+        <h1 class="text-lg font-medium">Followers</h1>
+      </div>
+      <div class="allFollowers w-full h-full pt-3 px-4 overflow-y-auto scroll-smooth">
+      </div>
+    </div>
+    <div class="nav flex justify-between items-center mt-5 px-4">
+      <h3 class="text-lg">
+        <%= user.username %>
+      </h3>
+      <div class="icons flex items-center gap-5">
+        <a href="/upload"><i class="text-[1.4rem] px-[3vw] py-[3vw] bg-zinc-700 rounded-full ri-add-box-line"></i></a>
+        <i class="settingsbtn text-[1.4rem] rounded-full px-[3vw] py-[1.5vw] bg-zinc-700 ri-menu-line" onclick="HandleSettings()"></i>
+      </div>
+    </div>
+    <div class="settings w-1/2 h-[30vh] bg-zinc-800 absolute -top-full -right-full py-5 ">
+      <a href="/edit" class="w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700">Edit Profile</a>
+      <a href="/logout" class="w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700"><i class="ri-logout-circle-fill text-zinc-300 text-2xl"></i>Logout</a>
+      <h1 class="w-full h-14 px-5 text-lg font-medium flex items-center gap-2 hover:bg-zinc-700" onclick="CancelSettings()"> <i class="ri-close-circle-fill text-2xl text-red-500"></i>Cancel</h1>
+    </div>
+    <div class="flex justify-between items-center pl-6 pr-[7vw] mt-8">
+      <div class="w-[19vw] h-[19vw] rounded-full bg-[#B1B1B1] overflow-hidden">
+        <img class="w-full h-full object-cover" src="/images/uploads/<%= user.ProfilePicture %>" alt="">
+      </div>
+      <div class="stats flex gap-5 items-center justify-between">
+        <div class="flex flex-col items-center justify-center">
+          <h3>
+            <%= user.posts.length %>
+          </h3>
+          <h4>Posts</h4>
+        </div>
+        <div data-id="<%= user._id %>" class="Followers flex flex-col items-center justify-center">
+          <h3 data-id="<%= user._id %>" class="Followers follow">
+            <%= user.Followers.length %>
+          </h3>
+          <h4 data-id="<%= user._id %>" class="Followers">Followers</h4>
+        </div>
+        <div data-id="<%= user._id %>" class="Followings flex flex-col items-center justify-center">
+          <h3 data-id="<%= user._id %>" class="Followings following">
+            <%= user.Followings.length %>
+          </h3>
+          <h4 data-id="<%= user._id %>" class="Followings">Followings</h4>
+        </div>
+      </div>
+    </div>
+    
+    <div class="dets px-6 mt-5">
+      <h3 class="text-lg mb-1">
+        <%= user.name %>
+      </h3>
+      <p class="text-xs tracking-tight opacity-50">
+        <%= user.bio ?? "No Bio Change bio from edit" %>
+      </p>
+    </div>
+    <div class="px-6 mt-5">
+      <a class="px-3 py-2 bg-zinc-800 text-xs rounded-md" href="/edit">Edit Profile</a>
+    </div>
+
+    <div class="w-full h-14 mt-10 flex justify-between">
+      <button onclick="HandlePostbtn()" class="postbtn w-full border-b-2 pb-1 border-zinc-400"><i
+          class="ri-grid-line text-4xl text-zinc-400"></i></button>
+      <button onclick="HandleSavebtn()" class="savebtn w-full border-b-2 pb-1 border-zinc-900 opacity-30"><i
+          class="ri-user-heart-line text-2xl text-zinc-400 border-2 border-zinc-400 rounded"></i></button>
+    </div>
+
+    <div class="container w-full whitespace-nowrap overflow-x-auto scroll-smooth mb-16" onscroll="HandleScroll()">
+      <div class="userPost w-full inline-block">
+        <div class="posts w-full flex gap-1 py-2 mt-5 flex-wrap">
+          <% if(user.posts.length> 0){ %>
+            <% user.posts.reverse().forEach(function(elem){ %>
+              <a class="w-[32.5%]" href="/userpost/<%= user._id %>/<%= elem._id %>">
+                <div class="post w-full h-32 overflow-hidden">
+                  <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+                </div>
+              </a>
+              <% }) %>
+                <% } else{ %>
+                  <h5 class="h5 w-full text-center mt-10 opacity-50">No Post yet</h5>
+                  <% } %>
+        </div>
+      </div>
+      <div class="savedPost w-0 inline-block">
+        <div class="saved w-full flex gap-1 py-2 mt-5 flex-wrap">
+          <% if(user.savedPost.length> 0){ %>
+            <% user.savedPost.reverse().forEach(function(elem){ %>
+              <a class="w-[32.5%]" href="/savedpost/<%= user._id %>/<%= elem._id %>">
+                <div class="post w-full h-32 bg-sky-100 overflow-hidden">
+                  <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+                </div>
+              </a>
+              <% }) %>
+                <% } else{ %>
+                  <h5 class="w-full text-center mt-10 opacity-50">No saved pictures.</h5>
+                  <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+  integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+  crossorigin="anonymous" referrerpolicy="no-referrer">
+  </script>
+  <script>
+    function HandleScroll() {
+      const container = document.querySelector('.container');
+      const scrollPositionContainer = container.scrollLeft;
+
+      if (scrollPositionContainer > 0) {
+        document.querySelector(".userPost").classList.remove('w-full')
+        document.querySelector(".userPost").classList.add('w-0')
+        document.querySelector(".savedPost").classList.remove('w-0')
+        document.querySelector(".savedPost").classList.add('w-full')
+        document.querySelector(".postbtn").classList.remove('border-zinc-400')
+        document.querySelector(".postbtn").classList.add('opacity-30', 'border-zinc-900')
+        document.querySelector(".savebtn").classList.remove('border-zinc-400')
+        document.querySelector(".savebtn").classList.add('opacity-30', 'border-zinc-900')
+        document.querySelector(".savebtn").classList.add('border-zinc-400')
+        document.querySelector(".savebtn").classList.remove('opacity-30', 'border-zinc-900')
+        if (document.querySelector(".h5")) {
+          document.querySelector(".h5").classList.add('opacity-0')
+          document.querySelector(".h5").classList.remove('opacity-50')
+        }
+
+      }
+      else {
+        document.querySelector(".userPost").classList.add('w-full')
+        document.querySelector(".userPost").classList.remove('w-0')
+        document.querySelector(".savedPost").classList.add('w-0')
+        document.querySelector(".savedPost").classList.remove('w-full')
+        document.querySelector(".postbtn").classList.add('border-zinc-400')
+        document.querySelector(".postbtn").classList.remove('opacity-30', 'border-zinc-900')
+        document.querySelector(".savebtn").classList.remove('border-zinc-400')
+        document.querySelector(".savebtn").classList.add('opacity-30', 'border-zinc-900')
+        if (document.querySelector(".h5")) {
+          document.querySelector(".h5").classList.remove('opacity-0')
+          document.querySelector(".h5").classList.add('opacity-50')
+        }
+      }
+    };
+
+    function HandleSavebtn() {
+      document.querySelector(".userPost").classList.remove('w-full')
+      document.querySelector(".userPost").classList.add('w-0')
+      document.querySelector(".savedPost").classList.remove('w-0')
+      document.querySelector(".savedPost").classList.add('w-full')
+      document.querySelector(".postbtn").classList.remove('border-zinc-400')
+      document.querySelector(".postbtn").classList.add('opacity-30', 'border-zinc-900')
+      document.querySelector(".savebtn").classList.remove('border-zinc-400')
+      document.querySelector(".savebtn").classList.add('opacity-30', 'border-zinc-900')
+      document.querySelector(".savebtn").classList.add('border-zinc-400')
+      document.querySelector(".savebtn").classList.remove('opacity-30', 'border-zinc-900')
+      if (document.querySelector(".h5")) {
+        document.querySelector(".h5").classList.add('opacity-0')
+        document.querySelector(".h5").classList.remove('opacity-50')
+      }
+    };
+
+    function HandlePostbtn() {
+      document.querySelector(".userPost").classList.add('w-full')
+      document.querySelector(".userPost").classList.remove('w-0')
+      document.querySelector(".savedPost").classList.add('w-0')
+      document.querySelector(".savedPost").classList.remove('w-full')
+      document.querySelector(".postbtn").classList.add('border-zinc-400')
+      document.querySelector(".postbtn").classList.remove('opacity-30', 'border-zinc-900')
+      document.querySelector(".savebtn").classList.remove('border-zinc-400')
+      document.querySelector(".savebtn").classList.add('opacity-30', 'border-zinc-900')
+      if (document.querySelector(".h5")) {
+        document.querySelector(".h5").classList.remove('opacity-0')
+        document.querySelector(".h5").classList.add('opacity-50')
+      }
+    };
+
+    function HandleSettings(){
+      document.querySelector('.settings').classList.remove("-right-full", "-top-full");
+      document.querySelector('.settings').classList.add("right-0", "top-0");
+    };
+    
+    function CancelSettings(){
+      document.querySelector('.settings').classList.add("-right-full", "-top-full");
+      document.querySelector('.settings').classList.remove("right-0", "top-0");
+    };
+
+    function HandleFollowFollowing(){
+      document.querySelector('.main').addEventListener('click', function(ev){
+        if(ev.target.classList.contains('Followers')){
+          ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowersDiv').classList.remove('-bottom-full');
+          ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowersDiv').classList.add('bottom-0');
+          ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.classList.add('overflow-y-hidden');
+          axios.get(`/Followers/${ev.target.dataset.id}`)
+          .then(function(res){
+            var clutter = "";
+            if(res.data.Followers.length > 0){
+              res.data.Followers.forEach(function(elem){
+                clutter += `<div class="w-full h-16 flex items-center justify-between mb-6">
+                              <div class="h-full w-3/5 flex items-center gap-2">
+                                <a href="/userProfile/${elem.username}">
+                                  <div class="w-[14.5vw] h-[14.5vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="/images/uploads/${elem.ProfilePicture}" alt="">
+                                  </div>
+                                </a>
+                                <h1 class="font-medium text-lg">${elem.username}</h1>
+                              </div>
+                              ${res.data.Followings.indexOf(elem._id) === -1 ?
+                                `<button data-id="${elem._id}" class="Request Follow w-24 py-2 rounded-lg font-semibold bg-indigo-600">Follow</button>` :
+                                `<button data-id="${elem._id}" class="Request Following w-24 py-2 rounded-lg font-semibold bg-zinc-800">Following</button>`
+                              }
+                              <button data-id="${elem._id}" class="RemoveFollower"><i data-id="${elem._id}" class="RemoveFollower ri-close-circle-fill text-3xl text-red-600 py-1 rounded-full px-1 hover:bg-zinc-700 ml-1"></i></button>
+                            </div>`
+              })
+            }
+            else{
+              clutter += `<div class="noFollowers w-full h-full flex items-center justify-center">
+                  <h1 class="text-zinc-500">No Followers</h1>
+                </div>`
+            }
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.allFollowers').innerHTML = clutter;
+          })
+        }
+        else if(ev.target.classList.contains('Followings')){
+          ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowingDiv').classList.remove('-bottom-full');
+          ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowingDiv').classList.add('bottom-0');
+          ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.classList.add('overflow-y-hidden')
+          axios.get(`/Followings/${ev.target.dataset.id}`)
+          .then(function(res){
+            var clutter = ""
+            if(res.data.Followings.length > 0){
+              res.data.Followings.forEach(function (elem){
+                clutter += `<div class="w-full h-16 flex items-center justify-between mb-6">
+                              <div class="h-full w-3/5 flex items-center gap-2">
+                                <a href="/userProfile/${elem.username}">
+                                  <div class="w-[14.5vw] h-[14.5vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="/images/uploads/${elem.ProfilePicture}" alt="">
+                                  </div>
+                                </a>
+                                <h1 class="font-medium">${elem.username}</h1>
+                              </div>
+                            <button data-id="${elem._id}" class="Request Following w-24 py-2 rounded-lg font-semibold bg-zinc-800">Following</button>
+                          </div>`
+              })
+            }
+            else{
+              clutter += `<div class="noFollowers w-full h-full flex items-center justify-center">
+                  <h1 class="text-zinc-500">you haven't followed anyone</h1>
+                  <a href="/suggestions" class="px-2 py-2 bg-indigo-600 ml-2 font-semibold rounded-lg">Suggestions</a>
+                </div>`
+            }
+            
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.allFollowings').innerHTML = clutter
+          })
+        }
+        else if(ev.target.classList.contains('backProfile')){
+          if(ev.target.parentNode.parentNode.classList.contains('FollowersDiv')){
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowersDiv').classList.add('-bottom-full');
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowersDiv').classList.remove('bottom-0');
+            ev.target.parentNode.parentNode.parentNode.parentNode.classList.remove('overflow-y-hidden')
+          }
+          else{
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowingDiv').classList.add('-bottom-full');
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.FollowingDiv').classList.remove('bottom-0');
+            ev.target.parentNode.parentNode.parentNode.parentNode.classList.remove('overflow-y-hidden')
+          }
+        }
+      })
+    };
+    HandleFollowFollowing();
+
+    function HandleFollow(){
+      document.querySelector('.main').addEventListener('click', function(ev){
+        if(ev.target.classList.contains('Request')){
+          axios.get(`/follow/${ev.target.dataset.id}`)
+          .then(function(res){
+            if(ev.target.classList.contains('Follow')){
+              ev.target.classList.remove('bg-indigo-600', 'Follow');
+              ev.target.classList.add('bg-zinc-800', 'Following');
+              ev.target.textContent = "Following";
+            }
+            else{
+              ev.target.classList.add('bg-indigo-600', 'Follow');
+              ev.target.classList.remove('bg-zinc-800', 'Following');
+              ev.target.textContent = "Follow";
+            }
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.follow').textContent = res.data.user.Followers.length;
+            ev.target.parentNode.parentNode.parentNode.parentNode.querySelector('.following').textContent = res.data.user.Followings.length;
+          })  
+        }
+      })
+    };
+    HandleFollow();
+
+    function RemoveFollower(){
+      document.querySelector(".FollowersDiv").addEventListener('click', function(ev){
+        if(ev.target.classList.contains('RemoveFollower')){
+          axios.get(`/RemoveFollowers/${ev.target.dataset.id}`)
+          .then(function(res){
+            var clutter = ""
+            ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.follow').textContent = res.data.Followers.length;
+            if(res.data.Followers.length === 0){
+              clutter += `<div class="noFollowers w-full h-full flex items-center justify-center">
+                  <h1 class="text-zinc-500">No Followers</h1>
+                </div>`
+              ev.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.allFollowers').innerHTML = clutter;
+            }
+            ev.target.parentNode.parentNode.remove();
+          })
+        }
+      })
+    };
+    RemoveFollower();
+    
+  </script>
+  <% include ./partials/footer.ejs %>
