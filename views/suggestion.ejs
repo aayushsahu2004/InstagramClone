@@ -1,0 +1,63 @@
+<% include ./partials/header.ejs %>
+
+<style>
+    body{
+        overflow-y: hidden;
+    }
+</style>
+
+<div class="w-full min-h-screen text-white ">
+    <div class="w-full h-16 bg-zinc-800 flex items-center gap-20 border-b-2 border-zinc-500 fixed z-30 ">
+        <a href="/feed"><i class="backProfile ri-arrow-left-line text-3xl font-semibold text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-700"></i></a>
+        <h1 class="text-lg font-medium text-zinc-300">Discover People</h1>
+    </div>
+    <div class="w-full h-full px-4 mt-20 fixed">
+        <h1 class="text-lg font-medium mb-6">All Suggestions</h1>
+        <div class="allsuggestions w-full h-full overflow-y-auto scroll-smooth">
+            <% suggestUser.forEach(function(elem){ %>
+                <div class="w-full h-16 flex items-center justify-between mb-6">
+                    <div class="h-full w-4/6 flex items-center gap-3">
+                        <a href="/userprofile/<%= elem.username %>">
+                            <div class="w-[17vw] h-[17vw] rounded-full bg-[#B1B1B1] overflow-hidden">
+                                <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.ProfilePicture %>" alt="">
+                            </div>
+                        </a>
+                        <div class="h-full w-4/6 py-2">
+                            <h1 class="text-md font-medium"><%= elem.username %></h1>
+                            <h2 class="text-zinc-400"><%= elem.name %></h2>
+                        </div>
+                    </div>
+                    <button data-id="<%= elem._id %>" class="Request Follow w-24 py-2 rounded-lg font-semibold bg-indigo-600">Follow</button> 
+                </div>
+            <% }) %>            
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+<script>
+    function HandleFollow(){
+        document.querySelector('.allsuggestions').addEventListener('click', function(ev){
+            if(ev.target.classList.contains('Request')){
+                axios.get(`/follow/${ev.target.dataset.id}`)
+                .then(function(res){
+                    if(ev.target.classList.contains('Follow')){
+                        ev.target.classList.remove('bg-indigo-600', 'Follow');
+                        ev.target.classList.add('bg-zinc-800', 'Following');
+                        ev.target.textContent = "Following";
+                    }
+                    else{
+                        ev.target.classList.add('bg-indigo-600', 'Follow');
+                        ev.target.classList.remove('bg-zinc-800', 'Following');
+                        ev.target.textContent = "Follow";
+                    }
+                })
+            }
+        })
+    };
+    HandleFollow();
+</script>
+
+<% include ./partials/footer.ejs %>

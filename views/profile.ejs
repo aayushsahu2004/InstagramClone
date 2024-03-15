@@ -40,8 +40,8 @@
         <%= user.username %>
       </h3>
       <div class="icons flex items-center gap-5">
-        <a href="/upload"><i class="text-[1.4rem] px-[3vw] py-[3vw] bg-zinc-700 rounded-full ri-add-box-line"></i></a>
-        <i class="settingsbtn text-[1.4rem] rounded-full px-[3vw] py-[1.5vw] bg-zinc-700 ri-menu-line" onclick="HandleSettings()"></i>
+        <a href="/upload"><i class="text-[1.4rem] px-[3vw] py-[3vw] hover:bg-zinc-700 rounded-full ri-add-box-line"></i></a>
+        <i class="settingsbtn text-[1.4rem] rounded-full px-[3vw] py-[1.5vw] hover:bg-zinc-700 ri-menu-line" onclick="HandleSettings()"></i>
       </div>
     </div>
     <div class="settings w-1/2 h-[30vh] bg-zinc-800 absolute -top-full -right-full py-5 ">
@@ -339,4 +339,4 @@
     RemoveFollower();
     
   </script>
-  <% include ./partials/footer.ejs %>
+<% include ./partials/footer.ejs %>

@@ -115,6 +115,20 @@ router.get('/upload', isloggedIn, async function (req, res) {
   res.render('upload', { footer: true, user });
 });
 
+router.get('/suggestions', isloggedIn, async function(req, res){
+  const user = await userModel.findOne({
+    username: req.session.passport.user
+  });
+  const FollowingsUserId = user.Followings.map(following => following._id);
+  const suggestUser = await userModel.find({
+    $and: [
+      { _id: { $ne: user._id } },
+      { _id: { $nin: FollowingsUserId } }
+    ]
+  });
+  res.render('suggestion', {footer: true, user, suggestUser});
+})
+
 router.post('/register', function (req, res, next) {
   const userData = new userModel({
     username: req.body.username,

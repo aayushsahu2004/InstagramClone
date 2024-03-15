@@ -13,8 +13,8 @@
     <div class="w-full px-4 flex items-center justify-between">
       <img class="w-1/4" src="/images/logo.png" alt="">
       <div class="icons -mt-2 flex gap-5 items-center">
-        <i class="text-[1.4rem] ri-heart-3-line"></i>
-        <i class="text-[1.4rem] ri-messenger-line"></i>
+        <a href="/suggestions"><i class="text-[1.4rem] w-[9vw] h-[9vw] flex items-center justify-center rounded-full hover:bg-zinc-700 ri-heart-3-line"></i></a>
+        <i class="text-[1.4rem] w-[9vw] h-[9vw] flex items-center justify-center rounded-full hover:bg-zinc-700 ri-messenger-line"></i>
       </div>
     </div>
     <div class="story px-3 flex gap-3 overflow-auto mt-5">
@@ -48,9 +48,9 @@
         <div class="post relative mt-10 w-full min-h-[50vh] overflow-hidden">
           <div class="title px-4 w-full flex items-center justify-between">
             <div class=" flex items-center gap-2">
-              <a class="w-[9vw] h-[9vw] bg-[#B1B1B1] rounded-full overflow-hidden"
+              <a class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden"
                 href="/userprofile/<%= post.user.username %>">
-                <div class="w-[9vw] h-[9vw] bg-[#B1B1B1] rounded-full overflow-hidden">
+                <div class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden">
                   <img data-id="<%= post._id %>" class="w-full h-full object-cover"
                     src="/images/uploads/<%= post.user.ProfilePicture %>" alt="">
                 </div>
@@ -60,7 +60,7 @@
               </h4>
               <h6 class="text-xs opacity-30">Now</h6>
             </div>
-            <i class="more ri-more-2-fill text-2xl font-bold"></i>
+            <i class="more w-[9vw] h-[9vw] flex items-center justify-center hover:bg-zinc-700 rounded-full ri-more-2-fill text-2xl font-bold"></i>
           </div>
           <div id="more" class="w-1/2 h-[30vh] bg-zinc-800 absolute -top-40 -right-full py-5">
             <% if (post.user._id.toString()===user._id.toString()) { %>
