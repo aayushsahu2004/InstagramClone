@@ -84,12 +84,12 @@
             <img data-id="<%= post._id %>" class="postImg w-full h-full object-cover"
               src="/images/uploads/<%= post.picture %>" alt="">
           </div>
-          <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
-            <div class="flex gap-3 mt-2">
+          <div class="options w-full px-2 flex justify-between items-center text-[1.4rem]">
+            <div class="flex gap-1 mt-2">
               <i data-id="<%= post._id %>"
-                class="like <%= post.likes.indexOf(user._id) === -1 ? 'ri-heart-3-line' : 'ri-heart-3-fill text-red-500' %>"></i>
-              <i data-id="<%= post._id %>" class="comments ri-chat-3-line"></i>
-              <i class="ri-share-circle-line"></i>
+                class="like px-[1.8vw] <%= post.likes.indexOf(user._id) === -1 ? 'ri-heart-3-line' : 'ri-heart-3-fill text-red-500' %>"></i>
+              <i data-id="<%= post._id %>" class="comments px-[1.8vw] rounded-full hover:bg-zinc-700 ri-chat-3-line"></i>
+              <i class="px-[1.8vw] rounded-full hover:bg-zinc-700 ri-share-circle-line"></i>
             </div>
             <% if(user.savedPost.indexOf(post._id)===-1){ %>
               <i data-id="<%= post._id %>" class="save ri-bookmark-line"></i>
@@ -108,15 +108,15 @@
           <div>
             <div>
               <% if(post.Comments.length> 0){ %>
-                <h2 data-id="<%= post._id %>" class="commentLen w-fit comments px-4 text-md text-zinc-500">view all <%= post.Comments.length %> comments</h2>
+                <h2 data-id="<%= post._id %>" class="commentLen w-fit mt-2 comments hover:bg-zinc-700 px-4 text-md text-zinc-500">view all <%= post.Comments.length %> comments</h2>
                 <% } else{ %>
-                  <h2 data-id="<%= post._id %>" class="w-fit comments px-4 text-md text-zinc-500">No Comments</h2>
+                  <h2 data-id="<%= post._id %>" class="w-fit comments mt-2 hover:bg-zinc-700 px-4 text-md text-zinc-500">No Comments</h2>
                   <% } %>
             </div>
           </div>
           <div class="Comments w-full h-4/5 bg-zinc-900 fixed -bottom-full z-30">
-            <div class="w-full h-16 bg-zinc-800 flex items-center gap-[31vw] px-2 border-b border-zinc-500">
-              <i class="backComments ri-arrow-left-line text-3xl font-semibold text-zinc-300"></i>
+            <div class="w-full h-16 bg-zinc-800 flex items-center gap-[31vw] border-b border-zinc-500">
+              <i class="backComments ri-arrow-left-line text-3xl font-semibold text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-700"></i>
               <h1 class="text-lg font-medium">Comments</h1>
             </div>
             <div class="w-full h-3/4 pt-3 ">
