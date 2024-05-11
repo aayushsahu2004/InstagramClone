@@ -6,11 +6,11 @@
       <a class="text-sm" href="/feed"><i class="ri-home-line"></i> home</a>
     </div>
     <div class="flex flex-col items-center gap-2 mt-20">
-      <form id="FileForm" hidden action="/upload" method="post" enctype="multipart/form-data">
-        <input id="FileInput" type="file" name="image">
+      <form id="FileForm" hidden action="/uploadProfilePicture" method="POST" enctype="multipart/form-data">
+        <input id="FileInput" type="file" name="image" accept="image/*">
       </form>
       <div class="image w-20 h-20 bg-[#B1B1B1] rounded-full overflow-hidden">
-        <img class="w-full h-full object-cover" src="/images/uploads/<%= user.ProfilePicture %>" alt="">
+        <img class="w-full h-full object-cover" src="<%= user.ProfilePicture.url %>" alt="">
       </div>
       <button onclick="Upload()" class="text-blue-500 capitalize">edit picture</button>
     </div>

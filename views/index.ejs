@@ -3,6 +3,9 @@
     <div class="flex flex-col items-center gap-5 px-4">
       <img class="w-1/2" src="/images/logo.png" alt="">
       <form class="w-full" action="/register" method="post">
+        <% if (messages.length > 0) { %>
+          <p class="error-message mt-0 text-center text-red-600"><%= messages %></p>
+        <% } %>
         <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username">
         <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="email" placeholder="email" name="email">
         <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="name" name="name">

@@ -21,7 +21,7 @@
                                 href="/userprofile/<%= user.username %>">
                                 <div class="w-[9vw] h-[9vw] bg-[#B1B1B1] rounded-full overflow-hidden">
                                     <img data-id="<%= post._id %>" class="w-full h-full object-cover"
-                                        src="/images/uploads/<%= postUser.ProfilePicture %>" alt="">
+                                        src="<%= postUser.ProfilePicture.url %>" alt="">
                                 </div>
                             </a>
                             <h4 class="text-sm">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="w-full h-96 mt-4 overflow-hidden">
                         <img data-id="<%= post._id %>" id="<%= post._id %>" class="postImg w-full h-full object-cover"
-                            src="/images/uploads/<%= post.picture %>" alt="">
+                            src="<%= post.picture %>" alt="">
                     </div>
                     <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
                         <div class="flex gap-3 mt-2">
@@ -99,7 +99,7 @@
                         </div>
                         <div class="w-full h-16 mt-1 py-2 flex items-center px-4 gap-2">
                             <div class="w-[14vw] h-[14vw] rounded-full bg-[#B1B1B1]">
-                                <img class="w-full h-full object-cover" src="/images/uploads/<%=user.ProfilePicture %>"
+                                <img class="w-full h-full object-cover" src="<%=user.ProfilePicture.url %>"
                                     alt="">
                             </div>
                             <input
@@ -241,7 +241,7 @@
                     <div class="w-11/12 min-h-10 flex gap-2">
                       <a href="/userprofile/${elem.user.username}">
                         <div class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden">
-                          <img class="w-full h-full object-cover" src="/images/uploads/${elem.user.ProfilePicture}" alt="">
+                          <img class="w-full h-full object-cover" src="${elem.user.ProfilePicture.url}" alt="">
                         </div>
                       </a>
                       <div class="w-full min-h-10">
@@ -303,7 +303,7 @@
                     <div class="w-11/12 min-h-10 flex gap-2">
                       <a href="/userprofile/${res.data.comment.user.username}">
                         <div class="w-[12vw] h-[12vw] bg-[#B1B1B1] rounded-full overflow-hidden">
-                          <img class="w-full h-full object-cover" src="/images/uploads/${res.data.comment.user.ProfilePicture}" alt="">
+                          <img class="w-full h-full object-cover" src="${res.data.comment.user.ProfilePicture.url}" alt="">
                         </div>
                       </a>
                       <div class="w-full min-h-10">

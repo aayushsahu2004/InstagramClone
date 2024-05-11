@@ -51,7 +51,7 @@
     </div>
     <div class="flex justify-between items-center pl-6 pr-[7vw] mt-8">
       <div class="w-[19vw] h-[19vw] rounded-full bg-[#B1B1B1] overflow-hidden">
-        <img class="w-full h-full object-cover" src="/images/uploads/<%= user.ProfilePicture %>" alt="">
+        <img class="w-full h-full object-cover" src="<%= user.ProfilePicture.url %>" alt="">
       </div>
       <div class="stats flex gap-5 items-center justify-between">
         <div class="flex flex-col items-center justify-center">
@@ -96,12 +96,12 @@
 
     <div class="container w-full whitespace-nowrap overflow-x-auto scroll-smooth mb-16" onscroll="HandleScroll()">
       <div class="userPost w-full inline-block">
-        <div class="posts w-full flex gap-1 py-2 mt-5 flex-wrap">
+        <div class="posts w-full flex items-start gap-1 py-2 mt-5 flex-wrap">
           <% if(user.posts.length> 0){ %>
             <% user.posts.reverse().forEach(function(elem){ %>
               <a class="w-[32.5%]" href="/userpost/<%= user._id %>/<%= elem._id %>">
                 <div class="post w-full h-32 overflow-hidden">
-                  <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+                  <img class="w-full h-full object-cover" src="<%= elem.picture %>" alt="">
                 </div>
               </a>
               <% }) %>
@@ -116,7 +116,7 @@
             <% user.savedPost.reverse().forEach(function(elem){ %>
               <a class="w-[32.5%]" href="/savedpost/<%= user._id %>/<%= elem._id %>">
                 <div class="post w-full h-32 bg-sky-100 overflow-hidden">
-                  <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+                  <img class="w-full h-full object-cover" src="<%= elem.picture %>" alt="">
                 </div>
               </a>
               <% }) %>
@@ -226,7 +226,7 @@
                               <div class="h-full w-3/5 flex items-center gap-2">
                                 <a href="/userProfile/${elem.username}">
                                   <div class="w-[14.5vw] h-[14.5vw] bg-[#B1B1B1] rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover" src="/images/uploads/${elem.ProfilePicture}" alt="">
+                                    <img class="w-full h-full object-cover" src="${elem.ProfilePicture.url}" alt="">
                                   </div>
                                 </a>
                                 <h1 class="font-medium text-lg">${elem.username}</h1>
@@ -260,7 +260,7 @@
                               <div class="h-full w-3/5 flex items-center gap-2">
                                 <a href="/userProfile/${elem.username}">
                                   <div class="w-[14.5vw] h-[14.5vw] bg-[#B1B1B1] rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover" src="/images/uploads/${elem.ProfilePicture}" alt="">
+                                    <img class="w-full h-full object-cover" src="${elem.ProfilePicture.url}" alt="">
                                   </div>
                                 </a>
                                 <h1 class="font-medium">${elem.username}</h1>

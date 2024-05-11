@@ -9,6 +9,7 @@ const storySchema = mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  fileId: String,
   storyImage: String,
   likes: [
     {type: mongoose.Schema.Types.ObjectId, ref: 'user'}

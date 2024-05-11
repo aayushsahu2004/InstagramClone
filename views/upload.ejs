@@ -17,7 +17,7 @@
     </div>
     <form id="uploadform" action="/uploadPost" class="w-full px-6 py-3 mt-10" enctype="multipart/form-data"
       method="post">
-      <input hidden type="file" name="image">
+      <input hidden type="file" name="image" accept="image/*">
       <input hidden type="radio" name="type" value="Post" checked>
       <textarea class="captionField px-2 py-1 w-full bg-zinc-900 border-2 h-20 border-zinc-800 resize-none rounded-md outline-none"
         name="caption" placeholder="Write a caption..."></textarea>
